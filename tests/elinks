@@ -1,0 +1,10 @@
+#!/bin/bash
+set -v
+
+elinks -dump 1 <<-EOF
+	<html>
+	<body>
+	<p>Hello, world!</p>
+	</body>
+	</html>
+EOF

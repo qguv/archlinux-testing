@@ -1,0 +1,15 @@
+#!/bin/bash
+set -v
+
+perl <<- "EOF"
+	use AnyEvent;
+	print "It";
+	my $cv = AnyEvent->condvar;
+	my $wait_one_and_a_half_seconds = AnyEvent->timer (
+		after => 2,
+		cb    => sub { $cv->send; print "or"; }
+	);
+	print " w";
+	$cv->recv;
+	print "ks!\n";
+EOF

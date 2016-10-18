@@ -1,0 +1,19 @@
+#!/bin/bash
+if [ -z "$1" ] || [ -z "$2" ]; then
+	echo "Usage: ./newtest <pkgname> <command> <args>..."
+	exit 2
+fi
+
+pkgname="$1"
+shift
+
+[ -e "tests/$pkgname" ] && echo "File exists!" && exit 3
+
+cat > "tests/$pkgname" <<- EOF
+	#!/bin/bash
+	set -v
+
+EOF
+
+echo "$@" >> "tests/$pkgname" || exit 4
+chmod a+x "tests/$pkgname" || exit 5

@@ -1,0 +1,19 @@
+#!/bin/bash
+set -o pipefail
+
+if [ -z "$1" ] || [ -n "$2" ]; then
+	echo "Usage: depsof <package>"
+	exit 2
+fi
+
+matches="$(pacman -Si $1 2>/dev/null | grep '^Name' | wc -l)"
+
+if [ $matches -lt 1 ]; then
+	echo "Error: No such package '$1'!"
+	exit 3
+elif [ $matches -gt 1 ]; then
+	echo "Error: Ambiguous package name '$1'!"
+	exit 4
+fi
+
+pacman -Sii "$1" | grep 'Required By' | cut -d':' -f2 | cut -d' ' -f'2-' | xargs pacman -Qq 2>&1 | grep -v 'was not found'

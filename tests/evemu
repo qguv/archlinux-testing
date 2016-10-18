@@ -1,0 +1,4 @@
+#!/bin/bash
+set -v
+
+sudo evemu-describe /dev/input/event0 | less

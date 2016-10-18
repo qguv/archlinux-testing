@@ -1,0 +1,20 @@
+#!/bin/bash
+set -v
+
+PUPPET_DIR='/etc/puppetlabs/code/environments/production/modules/helloworld/manifests'
+
+sudo mkdir -p "$PUPPET_DIR"
+cat <<-'EOF' | sudo tee "$PUPPET_DIR/init.pp"
+	class helloworld {
+		notify { 'Hello, world!': }
+	}
+EOF
+
+cat <<-'EOF' | sudo tee "$PUPPET_DIR/site.pp"
+node default {
+	class { 'helloworld': }
+}
+EOF
+
+sudo puppet parser validate "$PUPPET_DIR/site.pp"
+sudo puppet agent --server "localhost" --certname "localhost" -t
