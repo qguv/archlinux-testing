@@ -1,0 +1,7 @@
+#!/bin/bash
+set -v
+
+mkdir -p /tmp/archlinux-testing/python-django
+django-admin3 startproject archlinux_testing /tmp/archlinux-testing/python-django
+tree /tmp/archlinux-testing/python-django
+rm -rf /tmp/archlinux-testing
