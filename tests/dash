@@ -1,0 +1,4 @@
+#!/bin/bash
+set -v
+
+dash -c 'dash -c "[ -n /bin/dash ] && echo -n PA || echo FAIL" && echo SS' || echo FAIL
