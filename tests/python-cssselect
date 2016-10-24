@@ -6,7 +6,6 @@ python << EOF && echo 'PASS' || echo 'FAIL'
 
 from cssselect.parser import tokenize
 input = 'E\ é > f\u00a0[a~="y\\\"x"]:nth(/* fu /]* */-3.7)'
-print(input)
 output = [
 	"<IDENT 'E é' at 0>",
 	"<S ' ' at 4>",
@@ -30,7 +29,5 @@ output = [
 	"<EOF at 42>",
 ]
 
-for observed, expected in zip(map(str, tokenize(input)), output):
-	print(observed, expected)
-	assert(observed == expected)
+assert(output == [ str(x) for x in tokenize(input) ])
 EOF
