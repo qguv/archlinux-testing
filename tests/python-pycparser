@@ -1,0 +1,35 @@
+#!/bin/bash
+set -v
+
+# https://github.com/eliben/pycparser/blob/master/examples/c-to-c.py
+python << EOF && echo 'PASS' || echo 'FAIL'
+
+from string import whitespace
+from pycparser import c_parser, c_generator
+
+c_input = r'''
+    void f(char * restrict joe){}
+int main(void)
+{
+    unsigned int long k = 4;
+    int p = - k;
+    return 0;
+}
+'''
+
+c_output = '''\
+void f(char * restrict joe)
+{
+}
+
+int main(void)
+{
+  unsigned int long k = 4;
+  int p = -k;
+  return 0;
+}'''
+
+ast = c_parser.CParser().parse(c_input)
+generated = c_generator.CGenerator().visit(ast)
+
+EOF
