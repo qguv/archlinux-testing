@@ -1,0 +1,36 @@
+#!/bin/bash
+set -v
+
+# from https://github.com/scrapy/cssselect/blob/master/tests/test_cssselect.py
+python << EOF && echo 'PASS' || echo 'FAIL'
+
+from cssselect.parser import tokenize
+input = 'E\ é > f\u00a0[a~="y\\\"x"]:nth(/* fu /]* */-3.7)'
+print(input)
+output = [
+	"<IDENT 'E é' at 0>",
+	"<S ' ' at 4>",
+	"<DELIM '>' at 5>",
+	"<S ' ' at 6>",
+
+	# the no-break space is not whitespace in CSS
+	"<IDENT 'f\u00a0' at 7>",
+
+	"<DELIM '[' at 9>",
+	"<IDENT 'a' at 10>",
+	"<DELIM '~' at 11>",
+	"<DELIM '=' at 12>",
+	"<STRING 'y\\"x' at 13>",
+	"<DELIM ']' at 19>",
+	"<DELIM ':' at 20>",
+	"<IDENT 'nth' at 21>",
+	"<DELIM '(' at 24>",
+	"<NUMBER '-3.7' at 37>",
+	"<DELIM ')' at 41>",
+	"<EOF at 42>",
+]
+
+for observed, expected in zip(map(str, tokenize(input)), output):
+	print(observed, expected)
+	assert(observed == expected)
+EOF
