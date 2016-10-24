@@ -1,13 +1,16 @@
 #!/bin/bash
-if [ -z "$1" ] || [ -z "$2" ]; then
-	echo "Usage: ./newtest <pkgname> <command> <args>..."
+if [ -z "$1" ]; then
+	echo "Usage: ./newtest <pkgname> [<command> <args>...]"
 	exit 2
 fi
 
 pkgname="$1"
 shift
 
-[ -e "tests/$pkgname" ] && echo "File exists!" && exit 3
+if [ -e "tests/$pkgname" ]; then
+	echo "File exists!"
+	exit 3
+fi
 
 cat > "tests/$pkgname" <<- EOF
 	#!/bin/bash
