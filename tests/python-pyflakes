@@ -1,0 +1,10 @@
+#!/bin/bash
+set -v
+
+python > /dev/null <<-EOF && (echo 'PASS' && exit 0) || (echo 'FAIL' && exit 1)
+	from pyflakes.api import check
+	good = "{'foo': 'foo', 'bar': 'bar'}"
+	bad = "{'foo': 'foo', 'foo': 'bar'}"
+	assert(check(good, 'good string') == 0)
+	assert(check(bad, 'bad string') > 1)
+EOF
